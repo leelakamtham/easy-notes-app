@@ -1,4 +1,5 @@
 const Note = require('../models/note.model.js');
+const { db } = require('../models/note.model.js');
 
 
 
@@ -127,3 +128,23 @@ exports.delete = (req, res) => {
         });
     });
 };
+
+/*
+exports.searchPost = async (req,res)=>{
+    var response = [];
+    //console.log(req.query)
+
+    //search with title name
+    if( req.query.title ){
+        response = await db.Note.find({title: req.query.title});
+            
+                
+   }
+res.json(response)
+
+}
+*/
+
+
+//post = note
+//postSchema = noteSchema

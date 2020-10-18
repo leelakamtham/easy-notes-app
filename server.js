@@ -5,10 +5,12 @@ const app = express();
 
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+const Note = require('./app/models/note.model.js');
 
 mongoose.Promise = global.Promise;
 
-// Connecting to the database
+
+
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true
 }).then(() => {
@@ -17,6 +19,7 @@ mongoose.connect(dbConfig.url, {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
+var db = mongoose.connection;
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,6 +32,18 @@ app.get('/',(req,res)=>{
     res.json({"message":"take a quick note"});
 
 })
+
+app.get('/add',(req,res)=>{
+    res.json({"message":"add note"});
+
+})
+app.get('/notes/search',function(req,res){  //query params
+    var regex = new RegExp(req.query.q,'i')
+    return Note.find({title:regex},function(err,q){
+        return res.send(q);
+    });
+});
+
 require('./app/routes/note.routes.js')(app);
 
 app.listen(3000,(req,res)=>{
